@@ -1,13 +1,31 @@
 import React, { useState } from 'react';
 
 function App() {
+  const [step, setStep] = useState('amount'); // Стан для перемикання між етапами
+  const [amount, setAmount] = useState('');
+  const [customAmount, setCustomAmount] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
 
+  const handleAmountSubmit = () => {
+    if (amount || customAmount) {
+      setStep('details'); // Перехід до форми введення даних
+    } else {
+      setMessage('Please select or enter an amount.');
+    }
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
-    setMessage('Processing your donation...');
+
+    if (!name || !email) {
+      setMessage('Please enter both your name and email.');
+      return;
+    }
+
+    // Визначення остаточної суми
+    const donationAmount = amount || customAmount;
 
     try {
       // Створення білінгового запиту
@@ -20,7 +38,7 @@ function App() {
             Authorization:
               'Bearer sandbox_QbpEJylc3XRJ4iE8qe1axWfIGQ4k_H_bxfs3lkQt',
           },
-          body: JSON.stringify({ email, name }),
+          body: JSON.stringify({ email, name, amount: donationAmount }),
         }
       );
 
@@ -54,12 +72,15 @@ function App() {
 
       // Відображення посилання для завершення донату
       setMessage(
-        <p>
-          Click the link below to complete your donation: <br />
-          <a href={redirectUrl} target="_blank" rel="noopener noreferrer">
-            Complete Donation
-          </a>
-        </p>
+        <div>
+          <p>
+            Click the link below to complete your donation of ${donationAmount}:{' '}
+            <br />
+            <a href={redirectUrl} target="_blank" rel="noopener noreferrer">
+              Complete Donation
+            </a>
+          </p>
+        </div>
       );
     } catch (error) {
       console.error('Error:', error);
@@ -70,32 +91,54 @@ function App() {
   return (
     <div className="App">
       <h1>Make a Donation</h1>
-      <form id="donation-form" onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Name:
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Make Donation</button>
-      </form>
-      <div id="message">{message}</div>
+
+      {step === 'amount' && (
+        <div>
+          <h2>Select Donation Amount</h2>
+          <button onClick={() => setAmount('5')}>Donate $5</button>
+          <button onClick={() => setAmount('10')}>Donate $10</button>
+          <button onClick={() => setAmount('15')}>Donate $15</button>
+          <br />
+          <label>
+            Or enter your own amount:
+            <input
+              type="number"
+              value={customAmount}
+              onChange={e => setCustomAmount(e.target.value)}
+            />
+          </label>
+          <br />
+          <button onClick={handleAmountSubmit}>Continue</button>
+          {message && <p>{message}</p>}
+        </div>
+      )}
+
+      {step === 'details' && (
+        <form id="donation-form" onSubmit={handleSubmit}>
+          <label>
+            Email:
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Name:
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <button type="submit">Make Donation</button>
+          {message && <p>{message}</p>}
+        </form>
+      )}
     </div>
   );
 }
