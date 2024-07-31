@@ -5,7 +5,8 @@ function App() {
   const [amount, setAmount] = useState('');
   const [customAmount, setCustomAmount] = useState('');
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [givenName, setGivenName] = useState('');
+  const [familyName, setFamilyName] = useState('');
   const [message, setMessage] = useState('');
 
   const handleAmountSubmit = () => {
@@ -19,7 +20,7 @@ function App() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    if (!name || !email) {
+    if (!givenName || !email) {
       setMessage('Please enter both your name and email.');
       return;
     }
@@ -38,7 +39,12 @@ function App() {
             Authorization:
               'Bearer sandbox_QbpEJylc3XRJ4iE8qe1axWfIGQ4k_H_bxfs3lkQt',
           },
-          body: JSON.stringify({ email, name, amount: donationAmount }),
+          body: JSON.stringify({
+            email,
+            given_name: givenName,
+            family_name: familyName,
+            amount: donationAmount,
+          }),
         }
       );
 
@@ -126,12 +132,21 @@ function App() {
           </label>
           <br />
           <label>
-            Name:
+            Given Name:
             <input
               type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              value={givenName}
+              onChange={e => setGivenName(e.target.value)}
               required
+            />
+          </label>
+          <br />
+          <label>
+            Family Name:
+            <input
+              type="text"
+              value={familyName}
+              onChange={e => setFamilyName(e.target.value)}
             />
           </label>
           <br />
