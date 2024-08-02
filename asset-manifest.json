@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/charity-frontend/static/css/main.7acaea2f.css",
-    "main.js": "/charity-frontend/static/js/main.5f997e97.js",
+    "main.js": "/charity-frontend/static/js/main.3d099d50.js",
     "index.html": "/charity-frontend/index.html",
     "main.7acaea2f.css.map": "/charity-frontend/static/css/main.7acaea2f.css.map",
-    "main.5f997e97.js.map": "/charity-frontend/static/js/main.5f997e97.js.map"
+    "main.3d099d50.js.map": "/charity-frontend/static/js/main.3d099d50.js.map"
   },
   "entrypoints": [
     "static/css/main.7acaea2f.css",
-    "static/js/main.5f997e97.js"
+    "static/js/main.3d099d50.js"
   ]
 }
